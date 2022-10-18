@@ -1,6 +1,6 @@
-# {Company} {Api Name} OpenAPI Description
+# Phyllo Connect OpenAPI Description
 
-This repository contains [OpenAPI](https://www.openapis.org/) description for https://docs.{company}.com.
+This repository contains [OpenAPI](https://www.openapis.org/) description for https://docs.getphyllo.com/docs/api-reference.
 
 ## What is OpenAPI?
 
@@ -10,4 +10,4 @@ From the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification):
 
 ## Issues
 
-Feel free to [leave an issue](https://github.com/fern-{company}/{company}-openapi) on this repo.
+Feel free to [leave an issue](https://github.com/fern-phyllo/phyllo-openapi) on this repo.
