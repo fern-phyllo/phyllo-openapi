@@ -1,0 +1,643 @@
+openapi: 3.0.1
+info:
+  title: connect-api
+  version: 0.0.5
+paths:
+  /v1/work-platforms/{id}:
+    get:
+      operationId: ConnectService.getWorkPlatform
+      tags:
+        - ConnectService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConnectWorkPlatformId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectWorkPlatform'
+      security: &ref_0
+        - BasicAuth: []
+  /v1/work-platforms:
+    get:
+      operationId: ConnectService.getAllWorkPlatforms
+      tags:
+        - ConnectService
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAllWorkPlatformsResponse'
+      security: *ref_0
+  /v1/users/{id}:
+    get:
+      operationId: ConnectService.getUser
+      tags:
+        - ConnectService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConnectUserId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectUser'
+      security: *ref_0
+  /v1/users:
+    post:
+      operationId: ConnectService.createUser
+      tags:
+        - ConnectService
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectUser'
+      security: *ref_0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectCreateUserRequest'
+  /v1/users/external_id/{external_id}:
+    get:
+      operationId: ConnectService.getUserByExernalId
+      tags:
+        - ConnectService
+      parameters:
+        - name: external_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConnectExternalId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectUser'
+      security: *ref_0
+  /v1/sdk-tokens:
+    post:
+      operationId: ConnectService.createSDKToken
+      tags:
+        - ConnectService
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectSDKTokenResponse'
+      security: *ref_0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectSDKTokenRequest'
+  /v1/accounts/{id}:
+    get:
+      operationId: ConnectService.getAccount
+      tags:
+        - ConnectService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConnectAccountId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAccount'
+      security: *ref_0
+  /v1/accounts:
+    get:
+      operationId: ConnectService.getAllAccounts
+      tags:
+        - ConnectService
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ConnectUserId'
+        - name: work_platform_id
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ConnectWorkPlatformId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAllAccountsResponse'
+      security: *ref_0
+  /v1/accounts/{id}/disconnect:
+    post:
+      operationId: ConnectService.disconnectAccount
+      tags:
+        - ConnectService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConnectAccountId'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectDisconnectAccountResponse'
+      security: *ref_0
+components:
+  schemas:
+    ConnectWorkPlatformId:
+      type: string
+    ConnectRequestId:
+      type: string
+    ConnectUserId:
+      type: string
+    ConnectExternalId:
+      type: string
+    ConnectAccountId:
+      type: string
+    ConnectWorkPlatformAttribute:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ConnectWorkPlatformId'
+        name:
+          type: string
+        logo_url:
+          type: string
+      required:
+        - id
+        - name
+        - logo_url
+    ConnectWorkPlatform:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        category:
+          $ref: '#/components/schemas/ConnectWorkPlatformCategory'
+        status:
+          $ref: '#/components/schemas/ConnectStatus'
+        url:
+          type: string
+        products:
+          $ref: '#/components/schemas/ConnectProducts'
+      required:
+        - created_at
+        - updated_at
+        - category
+        - status
+        - url
+        - products
+      allOf:
+        - $ref: '#/components/schemas/ConnectWorkPlatformAttribute'
+    ConnectWorkPlatformCategory:
+      type: string
+      enum:
+        - MEDIA
+        - EDUCATION
+        - SOCIAL
+        - ENTERTAINMENT
+        - LIFESTYLE
+        - BUSINESS
+    ConnectStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+    ConnectProducts:
+      type: object
+      properties:
+        identity:
+          $ref: '#/components/schemas/ConnectIdentityProduct'
+        engagement:
+          $ref: '#/components/schemas/ConnectEngagementProduct'
+        income:
+          $ref: '#/components/schemas/ConnectIncomeProduct'
+        switch:
+          $ref: '#/components/schemas/ConnectSwitchProduct'
+      required:
+        - identity
+        - engagement
+        - income
+        - switch
+    ConnectAudience:
+      type: object
+      properties:
+        is_supported:
+          type: boolean
+      required:
+        - is_supported
+    ConnectIdentityProduct:
+      type: object
+      properties:
+        is_supported:
+          type: boolean
+        audience:
+          $ref: '#/components/schemas/ConnectAudience'
+      required:
+        - is_supported
+        - audience
+    ConnectEngagementProduct:
+      type: object
+      properties:
+        is_supported:
+          type: boolean
+        audience:
+          $ref: '#/components/schemas/ConnectAudience'
+      required:
+        - is_supported
+        - audience
+    ConnectIncomeProduct:
+      type: object
+      properties:
+        is_supported:
+          type: boolean
+      required:
+        - is_supported
+    ConnectSwitchProduct:
+      type: object
+      properties:
+        is_supported:
+          type: boolean
+      required:
+        - is_supported
+    ConnectAllWorkPlatformsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectWorkPlatform'
+        metadata:
+          $ref: '#/components/schemas/ConnectMetadata'
+      required:
+        - data
+        - metadata
+    ConnectMetadata:
+      type: object
+      properties:
+        offset:
+          type: integer
+        limit:
+          type: integer
+        from_date:
+          type: string
+          description: YYYY-MM-DD
+        to_date:
+          type: string
+          description: YYYY-MM-DD
+      required:
+        - offset
+        - limit
+    ConnectUserAttribute:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ConnectUserId'
+        name:
+          type: string
+      required:
+        - id
+        - name
+    ConnectUser:
+      type: object
+      properties:
+        external_id:
+          $ref: '#/components/schemas/ConnectExternalId'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ConnectStatus'
+      required:
+        - external_id
+        - created_at
+        - updated_at
+        - status
+      allOf:
+        - $ref: '#/components/schemas/ConnectUserAttribute'
+    ConnectAllUsersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectUser'
+        metadata:
+          $ref: '#/components/schemas/ConnectMetadata'
+      required:
+        - data
+        - metadata
+    ConnectCreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        external_id:
+          $ref: '#/components/schemas/ConnectExternalId'
+      required:
+        - name
+        - external_id
+    ConnectSDKTokenRequest:
+      type: object
+      properties:
+        user_id:
+          $ref: '#/components/schemas/ConnectUserId'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectPhylloProducts'
+      required:
+        - user_id
+        - products
+    ConnectPhylloProducts:
+      type: string
+      enum:
+        - IDENTITY
+        - ENGAGEMENT
+        - INCOME
+        - ENGAGEMENT.AUDIENCE
+        - IDENTITY.AUDIENCE
+    ConnectSDKTokenResponse:
+      type: object
+      properties:
+        sdk_token:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+      required:
+        - sdk_token
+        - expires_at
+    ConnectAccount:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ConnectAccountId'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/ConnectUserAttribute'
+        work_platform:
+          $ref: '#/components/schemas/ConnectWorkPlatformAttribute'
+        platform_username:
+          type: string
+        profile_pic_url:
+          type: string
+        status:
+          $ref: '#/components/schemas/ConnectAccountStatus'
+        platform_profile_name:
+          type: string
+        platform_profile_id:
+          type: string
+        platform_profile_published_at:
+          type: string
+          format: date-time
+        data:
+          $ref: '#/components/schemas/ConnectAccountData'
+      required:
+        - id
+        - created_at
+        - updated_at
+        - user
+        - work_platform
+        - status
+        - data
+    ConnectAccountData:
+      type: object
+      properties:
+        identity:
+          $ref: '#/components/schemas/ConnectIdentityData'
+        engagement:
+          $ref: '#/components/schemas/ConnectEngagementData'
+        income:
+          $ref: '#/components/schemas/ConnectIncomeData'
+    ConnectIdentityData:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ConnectDataStatus'
+        last_sync_at:
+          type: string
+          format: date-time
+        monitor_type:
+          $ref: '#/components/schemas/ConnectMonitoringType'
+        audience:
+          $ref: '#/components/schemas/ConnectIdentityAudienceData'
+      required:
+        - status
+        - monitor_type
+    ConnectDataStatus:
+      type: string
+      enum:
+        - SYNCED
+        - IN_PROGRESS
+        - NOT_SUPPORTED
+        - NOT_SYNCED
+        - PARTIAL_SYNCED
+    ConnectMonitoringType:
+      type: string
+      enum:
+        - STANDARD
+        - ON_DEMAND
+    ConnectIdentityAudienceData:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ConnectDataStatus'
+        last_sync_at:
+          type: string
+          format: date-time
+        monitor_type:
+          $ref: '#/components/schemas/ConnectMonitoringType'
+      required:
+        - status
+        - monitor_type
+    ConnectEngagementData:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ConnectDataStatus'
+        last_sync_at:
+          type: string
+          format: date-time
+        refresh_since:
+          type: string
+          format: date-time
+        data_available_from:
+          type: string
+          format: date-time
+        monitor_type:
+          $ref: '#/components/schemas/ConnectMonitoringType'
+        audience:
+          $ref: '#/components/schemas/ConnectEngagementAudienceData'
+      required:
+        - status
+        - monitor_type
+    ConnectEngagementAudienceData:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ConnectDataStatus'
+        last_sync_at:
+          type: string
+          format: date-time
+        refresh_since:
+          type: string
+          format: date-time
+        data_available_from:
+          type: string
+          format: date-time
+        monitor_type:
+          $ref: '#/components/schemas/ConnectMonitoringType'
+      required:
+        - status
+        - monitor_type
+    ConnectIncomeData:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ConnectDataStatus'
+        last_sync_at:
+          type: string
+          format: date-time
+        refresh_since:
+          type: string
+          format: date-time
+        data_available_from:
+          type: string
+          format: date-time
+        monitor_type:
+          $ref: '#/components/schemas/ConnectMonitoringType'
+      required:
+        - status
+        - monitor_type
+    ConnectAllAccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAccount'
+        metadata:
+          $ref: '#/components/schemas/ConnectMetadata'
+      required:
+        - data
+        - metadata
+    ConnectDisconnectAccountResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ConnectAccountId'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/ConnectUserAttribute'
+        work_platform:
+          $ref: '#/components/schemas/ConnectWorkPlatformAttribute'
+        status:
+          $ref: '#/components/schemas/ConnectAccountStatus'
+      required:
+        - id
+        - created_at
+        - updated_at
+        - user
+        - work_platform
+        - status
+    ConnectAccountStatus:
+      type: string
+      enum:
+        - CONNECTED
+        - NOT_CONNECTED
+        - SESSION_EXPIRED
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+servers:
+  - url: https://api.getphyllo.com
+    docs: >-
+      Use Production mode to go live with your integration. On production, your
+      users will need to use their real credentials to log in to the diferent
+      platforms. API endpoints return real data and updates are made to
+      accounts. Note that all account connections and data syncing via APIs in
+      this mode are billable.
+  - url: https://api.sandbox.getphyllo.com
+    docs: >-
+      Use Sandbox mode to build and test your integration. In this mode, you can
+      use any random credentials to log into platforms. All API endpoints will
+      return mocked data and no changes are made to any account.
