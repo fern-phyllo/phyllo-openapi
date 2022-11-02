@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: connect-api
-  version: 0.0.5
+  version: 0.0.6
 paths:
   /v1/work-platforms/{id}:
     get:
